@@ -1,8 +1,9 @@
+
 # Architecture — Pipeline AWS Event-Driven de Matching NLP
  
 ## Vue d'ensemble
  
-![Architecture](images/architecture.png)
+![Architecture](images/architecture.svg)
  
 Ce projet met en œuvre une architecture **event-driven** sur AWS, dans laquelle le dépôt d'un fichier dans S3 déclenche automatiquement une chaîne de traitements sans aucune intervention humaine. L'objectif : transformer des documents bruts (dossiers de compétences Word, fiches de missions Excel) en recommandations structurées de matching consultant-mission.
  
@@ -101,4 +102,3 @@ Les fichiers `.docx` produits par des consultants peuvent contenir des caractèr
  
 ### Idempotence
 En cas de re-déclenchement accidentel (double dépôt du même fichier), les Lambdas de nettoyage utilisent un identifiant unique par document pour éviter les doublons dans DocumentDB.
- 
