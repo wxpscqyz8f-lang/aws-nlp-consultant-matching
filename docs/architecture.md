@@ -3,7 +3,7 @@
  
 ## Vue d'ensemble
  
-![Architecture](images/architecture.svg)
+![Architecture](images/architecture.png)
  
 Ce projet met en œuvre une architecture **event-driven** sur AWS, dans laquelle le dépôt d'un fichier dans S3 déclenche automatiquement une chaîne de traitements sans aucune intervention humaine. L'objectif : transformer des documents bruts (dossiers de compétences Word, fiches de missions Excel) en recommandations structurées de matching consultant-mission.
  
