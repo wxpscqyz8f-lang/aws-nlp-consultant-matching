@@ -32,7 +32,7 @@ Le cabinet gérait plusieurs dizaines de consultants en intercontrat. Chaque sem
  
 ## Architecture Globale
  
-![Architecture Pipeline](docs/images/architecture.svg)
+![Architecture Pipeline](docs/images/architecture.png)
  
 L'architecture repose sur un pattern **event-driven** : chaque dépôt de fichier dans S3 déclenche automatiquement une chaîne de traitements Lambda sans intervention humaine.
  
