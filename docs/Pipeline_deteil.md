@@ -1,7 +1,4 @@
 
-e detail · MD
-Copier
-
 # Détail du Pipeline — 6 Fonctions Lambda
  
 ## Vue d'ensemble
