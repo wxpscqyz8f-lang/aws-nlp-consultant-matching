@@ -1,0 +1,104 @@
+# Architecture — Pipeline AWS Event-Driven de Matching NLP
+ 
+## Vue d'ensemble
+ 
+![Architecture](images/architecture.png)
+ 
+Ce projet met en œuvre une architecture **event-driven** sur AWS, dans laquelle le dépôt d'un fichier dans S3 déclenche automatiquement une chaîne de traitements sans aucune intervention humaine. L'objectif : transformer des documents bruts (dossiers de compétences Word, fiches de missions Excel) en recommandations structurées de matching consultant-mission.
+ 
+---
+ 
+## Principes Architecturaux
+ 
+### Event-Driven
+Aucun orchestrateur central ne planifie les exécutions. Chaque étape est déclenchée par l'événement produit par l'étape précédente (S3 event trigger, succès Lambda). Cela garantit une scalabilité naturelle et une résilience aux pannes partielles.
+ 
+### Séparation des chaînes
+Le pipeline est divisé en deux chaînes indépendantes — **Consultant** et **Mission** — qui alimentent une étape de matching centrale. Cette séparation permet de traiter consultants et missions à des rythmes différents (les profils consultants changent rarement, les missions arrivent chaque semaine).
+ 
+### Responsabilité unique par Lambda
+Chaque fonction Lambda a un rôle précis et limité. Ce découpage a deux avantages concrets : rester dans les limites de timeout Lambda (15 minutes max), et faciliter le debug (une Lambda qui échoue n'impacte pas les autres).
+ 
+---
+ 
+## Composants AWS Utilisés
+ 
+### AWS S3
+Deux buckets distincts :
+- `dossierscompetences` — reçoit les fichiers `.docx` des consultants
+- `opportunites` — reçoit les fichiers `.xlsx` des missions hebdomadaires
+ 
+Chaque bucket est configuré avec un **S3 Event Notification** qui déclenche la Lambda correspondante à chaque nouveau fichier déposé.
+ 
+### AWS Lambda (Python 3.7)
+Six fonctions Lambda organisées en deux chaînes + un moteur central. Les dépendances Python partagées (`pandas`, `numpy`, `docx2txt`) sont packagées dans des **Lambda Layers** pour maintenir des packages de déploiement légers.
+ 
+### AWS Comprehend
+Service NLP managé utilisé pour l'extraction d'entités nommées et de mots-clés à partir des textes de dossiers et de descriptions de missions. Aucun modèle à entraîner — l'API Comprehend est appelée directement depuis Lambda 2.
+ 
+### AWS DocumentDB (compatible MongoDB)
+Base de données NoSQL choisie pour stocker les profils consultants et les opportunités. Le choix NoSQL est justifié par la nature semi-structurée et hétérogène des données — chaque dossier consultant peut avoir des champs différents selon le profil.
+ 
+Collections utilisées :
+- `dcs` — entités brutes extraites par Comprehend
+- `dc_nettoye` — profils consultants normalisés, prêts pour le matching
+- `opportunites` — missions structurées, prêtes pour le matching
+ 
+### AWS IAM
+Chaque Lambda dispose d'un **rôle IAM dédié** avec le principe du moindre privilège : Lambda 2 a accès à S3 + Comprehend + DocumentDB, pas aux autres services. Aucune clé d'API en dur dans le code.
+ 
+---
+ 
+## Flux de Données
+ 
+![Flux de données](images/data_flow.svg)
+ 
+### Phase 1 — Ingestion et traitement consultant
+ 
+```
+.docx (S3)
+    │
+    ▼ Lambda 1
+Texte brut UTF-8
+    │
+    ▼ Lambda 2 + Comprehend
+Entités JSON → DocumentDB (dcs)
+    │
+    ▼ Lambda 3
+Profils normalisés → DocumentDB (dc_nettoye)
+```
+ 
+### Phase 2 — Ingestion et traitement mission
+ 
+```
+.xlsx (S3)
+    │
+    ▼ Lambda 4
+Données brutes + NLP descriptions
+    │
+    ▼ Lambda 5
+Missions structurées → DocumentDB (opportunites)
+```
+ 
+### Phase 3 — Matching
+ 
+```
+dc_nettoye + opportunites
+    │
+    ▼ Lambda 6 (Jaccard)
+Top 3 consultants par mission → résultat stocké
+```
+ 
+---
+ 
+## Gestion des Contraintes Techniques
+ 
+### Timeout Lambda
+Le timeout par défaut de 3 secondes est insuffisant pour les appels Comprehend. Les Lambdas NLP sont configurées avec un timeout étendu. Le découpage en 6 fonctions courtes plutôt que 2-3 fonctions longues a été privilégié pour rester dans les limites de 15 minutes.
+ 
+### Encodage
+Les fichiers `.docx` produits par des consultants peuvent contenir des caractères spéciaux, des accents ou des encodages non-standard. Lambda 1 gère explicitement la conversion en UTF-8 avant toute autre opération.
+ 
+### Idempotence
+En cas de re-déclenchement accidentel (double dépôt du même fichier), les Lambdas de nettoyage utilisent un identifiant unique par document pour éviter les doublons dans DocumentDB.
+ 
