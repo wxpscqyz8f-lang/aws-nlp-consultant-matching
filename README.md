@@ -89,7 +89,7 @@ Sources (.docx / .xlsx)
  
 | Étape | Fonction | Entrée | Sortie |
 |-------|----------|--------|--------|
-| 6 | Moteur Jaccard | `dc_nettoye` + `opportunites` | Top 3 consultants/mission |
+| 6 | Moteur Jaccard | `dc_nettoye` + `opportunites` | Top 3 consultants/mission (classement consultants) |
  
 ---
  
