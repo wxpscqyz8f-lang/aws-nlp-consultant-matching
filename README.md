@@ -235,7 +235,7 @@ aws-nlp-consultant-matching/
 - ==> **Top 3 consultants** identifiés automatiquement par opportunité en quelques secondes
 - ==> **Architecture event-driven** — aucune intervention manuelle après dépôt de fichier
 - ==> **Pipeline bout en bout** — de l'ingestion brute (.docx/.xlsx) à la recommandation structurée
-- ==> **Conception et déploiement solo** — architecture, Lambda, IAM, tests, mise en production
+- ==> **Conception et déploiement** — architecture, Lambda, IAM, tests, mise en production
  
 ---
  
