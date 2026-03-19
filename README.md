@@ -68,7 +68,7 @@ Sources (.docx / .xlsx)
  
 ## Flux de Données Détaillé
  
-![Flux de données](docs/images/data_flow.svg)
+![Flux de données](docs/images/data_flow.png)
  
 ### Chaîne Consultant
  
