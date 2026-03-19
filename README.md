@@ -148,9 +148,7 @@ def top_consultants_par_mission(mission: Dict, consultants: List[Dict], top_n: i
  
 ---
  
-## Exposition des Résultats — 3 Formats
- 
-Les résultats du pipeline sont exposés sous trois formats complémentaires :
+## Exposition des Résultats 
  
 ### 1. Rapport Power BI 
  
@@ -166,16 +164,6 @@ Les résultats du pipeline sont exposés sous trois formats complémentaires :
 | Évolution | Score moyen par semaine · Progression du vivier |
  
 → Voir [`powerbi/POWERBI_GUIDE.md`](powerbi/POWERBI_GUIDE.md) pour reconstruire le rapport
- 
-### 2. Dashboard analytique SVG
- 
-![Matching Analytics](docs/images/matching_analytics.svg)
- 
-### 3. Notebook Jupyter
- 
-Analyse complète avec matplotlib — distribution des scores, gap compétences, vivier, évolution.
- 
-→ [`notebooks/matching_analytics_demo.ipynb`](notebooks/matching_analytics_demo.ipynb)
  
 ---
  
