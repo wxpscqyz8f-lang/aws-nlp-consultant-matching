@@ -241,6 +241,6 @@ aws-nlp-consultant-matching/
  
 ## Projets Associés
  
-- [Plateforme BI Risk & Finance — Power BI BNP Paribas](../powerbi-risk-finance-dashboard/README.md)
+- [Plateforme BI Risk & Finance — Power BI BNP Paribas]([..](https://github.com/wxpscqyz8f-lang/powerbi-risk-finance-dashboard/README.md)
 - [Modélisation Data Warehouse dbt](#) *(à venir)*
  
