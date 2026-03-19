@@ -52,7 +52,7 @@ Chaque Lambda dispose d'un **rôle IAM dédié** avec le principe du moindre pri
  
 ## Flux de Données
  
-![Flux de données](images/data_flow.svg)
+![Flux de données](images/data_flow.png)
  
 ### Phase 1 — Ingestion et traitement consultant
  
