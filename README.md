@@ -152,7 +152,7 @@ def top_consultants_par_mission(mission: Dict, consultants: List[Dict], top_n: i
  
 Les résultats du pipeline sont exposés sous trois formats complémentaires :
  
-### 1. Rapport Power BI (recommandé)
+### 1. Rapport Power BI 
  
 ![Maquette Power BI](powerbi/powerbi_mockup_page1.svg)
  
